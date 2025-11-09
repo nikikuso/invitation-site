@@ -5,15 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Envelope + Text Animation</title>
 <style>
+/* ======================
+   💡 비율 고정 래퍼 추가
+   ====================== */
 body {
   margin: 0;
   background-color: #000000;
   font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   transition: background-color 1.5s ease;
   overflow-x: hidden;
+  display: flex;
+  justify-content: center;
 }
 
-/* envelope 섹션 */
+/* 아이폰 11 기준 화면 크기 (375x812) */
+.scale-wrapper {
+  width: 375px;
+  height: 812px;
+  transform: scale(calc(100vw / 375));
+  transform-origin: top center;
+  overflow: hidden;
+}
+
+/* ======================
+   기존 스타일 유지
+   ====================== */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -65,11 +81,12 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
-  transform: translateY(-200px); /* PC/모바일 동일 위치 */
+  transform: translateY(-220px); /* ← 텍스트 전체 위치 (조정 포인트) */
   opacity: 0;
   transition: opacity 1s ease;
 }
 
+/* 텍스트 애니메이션 */
 .jungle-cont__title,
 .jungle-cont__sub,
 .jungle-cont__desc {
@@ -85,48 +102,58 @@ body {
   filter: blur(0);
 }
 
+/* 색상/폰트 크기 */
 .jungle-cont__title,
 .jungle-cont__sub { color: #c60000; }
 .jungle-cont__desc { color: #000000; }
 
-.jungle-cont__title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; }
-.jungle-cont__sub { font-size: 1rem; margin-bottom: 1rem; }
-.jungle-cont__desc { font-size: 0.9rem; line-height: 1.8; max-width: 800px; padding: 0 1rem; }
+.jungle-cont__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.8rem; } /* 🔧 제목 크기/간격 */
+.jungle-cont__sub { font-size: 0.9rem; margin-bottom: 0.8rem; } /* 🔧 부제 크기/간격 */
+.jungle-cont__desc { font-size: 0.8rem; line-height: 1.6; max-width: 800px; padding: 0 1rem; } /* 🔧 설명 */
 
 .trigger-active { opacity: 1; }
 
+/* 모바일 사이즈에서도 동일하게 작동 */
 @media (max-width: 480px) {
-  .envelope { width: 250px; height: 170px; }
+  .scale-wrapper {
+    transform: scale(1);
+    width: 100%;
+    height: 100vh;
+  }
+  .trigger-section { transform: translateY(-200px); }
 }
 </style>
 </head>
 <body>
 
-<section class="hero">
-  <div class="envelope">
-    <div class="envelope-body">
-      <img src="envelope-back.png" class="back" alt="봉투 뒷면">
-      <img src="envelope-shadow-flap.png" class="shadow-flap" alt="뚜껑 그림자">
-      <img src="envelope-front.png" class="front" alt="봉투 앞면">
-      <img src="envelope-flap.png" class="flap" alt="봉투 뚜껑">
+<!-- 💡 추가된 래퍼 -->
+<div class="scale-wrapper">
+  <section class="hero">
+    <div class="envelope">
+      <div class="envelope-body">
+        <img src="envelope-back.png" class="back" alt="봉투 뒷면">
+        <img src="envelope-shadow-flap.png" class="shadow-flap" alt="뚜껑 그림자">
+        <img src="envelope-front.png" class="front" alt="봉투 앞면">
+        <img src="envelope-flap.png" class="flap" alt="봉투 뚜껑">
+      </div>
+      <img src="letter.png" class="letter" alt="편지">
     </div>
-    <img src="letter.png" class="letter" alt="편지">
-  </div>
-</section>
+  </section>
 
-<section class="trigger-section" id="triggerSection">
-  <div class="jungle-cont__copy">
-    <p class="jungle-cont__title">당신을 초대합니다</p>
-    <p class="jungle-cont__sub">조선대학교 시각디자인학과 75th 졸업전시회</p>
-    <p class="jungle-cont__desc">
-      빛과 색, 형태로 세상을 표현한 여러분의 여정에 박수를 보냅니다.<br>
-      <span>수많은 고민과 시도가 모여 오늘의 전시를 만들었네요.<br>
-      당신의 디자인이 앞으로도 세상에 새로운 시선을 더해주길 바랍니다.</span><br><br>
-      <span>이 여정의 끝이 또 다른 시작이 되기를 응원합니다.<br>
-      시각디자인학과 졸업전시회를 진심으로 축하드립니다!</span><br><br>
-    </p>
-  </div>
-</section>
+  <section class="trigger-section" id="triggerSection">
+    <div class="jungle-cont__copy">
+      <p class="jungle-cont__title">당신을 초대합니다</p>
+      <p class="jungle-cont__sub">조선대학교 시각디자인학과 75th 졸업전시회</p>
+      <p class="jungle-cont__desc">
+        빛과 색, 형태로 세상을 표현한 여러분의 여정에 박수를 보냅니다.<br>
+        <span>수많은 고민과 시도가 모여 오늘의 전시를 만들었네요.<br>
+        당신의 디자인이 앞으로도 세상에 새로운 시선을 더해주길 바랍니다.</span><br><br>
+        <span>이 여정의 끝이 또 다른 시작이 되기를 응원합니다.<br>
+        시각디자인학과 졸업전시회를 진심으로 축하드립니다!</span><br><br>
+      </p>
+    </div>
+  </section>
+</div>
 
 <script>
 const envelope = document.querySelector('.envelope');
@@ -155,7 +182,7 @@ const letterMoveDown = 50;           // 편지 아래 이동 거리 (px)
 const letterRotateDuration = 800;    // 편지 이동/회전 시간 (ms)
 
 /* ✨ 배경/텍스트 애니메이션 값 ✨ */
-const bgTransitionDelay = 1500;       // 편지 이동 끝난 후 배경 전환까지 딜레이 (ms)
+const bgTransitionDelay = 1500;      // 편지 이동 끝난 후 배경 전환까지 딜레이 (ms)
 const textScrollDistance = 100;      // 스크롤 거리 (px)
 const textScrollDuration = 1000;     // 스크롤 시간 (ms)
 const textStaggerDelay = 700;        // 텍스트 순차 등장 딜레이 (ms)
@@ -165,18 +192,16 @@ const triggerSection = document.getElementById('triggerSection');
 const textElements = document.querySelectorAll('.jungle-cont__title, .jungle-cont__sub, .jungle-cont__desc');
 
 window.addEventListener('load', () => {
-  // envelope 애니메이션 시작 (load 후 약간 딜레이)
   setTimeout(() => {
-    // flap 회전
+    // flap 열기
     flap.style.transition = `transform ${flapRotationDuration}ms ease-in-out`;
     flap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
 
-    // shadow-flap 회전/등장
     shadowFlap.style.transition = `transform ${flapRotationDuration}ms ease-in-out, opacity ${flapRotationDuration/2}ms ease-in-out`;
     shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
     shadowFlap.style.opacity = 1;
 
-    // letter 위로 이동
+    // 편지 올라오기
     setTimeout(() => {
       flap.style.zIndex = 2;
       shadowFlap.style.zIndex = 3;
@@ -185,10 +210,7 @@ window.addEventListener('load', () => {
       letter.style.transform = `translateY(${letterUpDistance}px)`;
     }, flapRotationDuration + 50);
 
-    // letter 최상단
-    setTimeout(() => { letter.style.zIndex = 6; }, flapRotationDuration + 50 + letterUpDuration);
-
-    // letter 내려가면서 편지+봉투 회전/이동
+    // 편지 내려오며 회전/이동
     setTimeout(() => {
       letter.style.transition = `transform ${letterRotateDuration}ms ease-in-out`;
       letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterDownDistance + letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
@@ -198,7 +220,7 @@ window.addEventListener('load', () => {
 
       front.style.zIndex = 5;
 
-      // ✨ 편지 이동 끝난 후 300ms 뒤 배경/텍스트/스크롤 실행
+      // 배경/텍스트/스크롤 실행
       setTimeout(() => {
         document.body.style.backgroundColor = '#ffffff';
         triggerSection.classList.add('trigger-active');
@@ -207,12 +229,11 @@ window.addEventListener('load', () => {
         });
         smoothScrollBy(textScrollDistance, textScrollDuration);
       }, bgTransitionDelay);
-
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
-  }, 1500); // load 후 envelope 시작 딜레이
+  }, 1500); // load 후 시작 딜레이
 });
 
-// 부드러운 스크롤 함수
+// 부드러운 스크롤
 function smoothScrollBy(distance, duration) {
   const start = window.scrollY;
   const target = start + distance;
@@ -225,7 +246,6 @@ function smoothScrollBy(distance, duration) {
     window.scrollTo(0, start + (target - start) * ease);
     if (progress < 1) requestAnimationFrame(step);
   }
-
   requestAnimationFrame(step);
 }
 </script>
