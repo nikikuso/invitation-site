@@ -65,7 +65,7 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
-  transform: translateY(-100px); /* 기본 텍스트 위치 */
+  transform: translateY(-200px); /* PC 기준 위치 */
   opacity: 0;
   transition: opacity 1s ease;
 }
@@ -95,18 +95,12 @@ body {
 
 .trigger-active { opacity: 1; }
 
-/* 일반 모바일용 */
+/* 모바일 전용 위치 조정 */
 @media (max-width: 480px) {
   .envelope { width: 250px; height: 170px; }
-}
-
-/* 작은 화면(iPhone mini 등) 전용 */
-@media (max-width: 375px) {
-  .jungle-cont__title { font-size: 1.2rem; margin-bottom: 0.8rem; }
-  .jungle-cont__sub   { font-size: 0.9rem; margin-bottom: 0.8rem; }
-  .jungle-cont__desc  { font-size: 0.8rem; line-height: 1.6; padding: 0 0.5rem; }
-
-  .trigger-section { transform: translateY(-150px); } /* 텍스트 위치 살짝 올리기 */
+  .trigger-section {
+    transform: translateY(-250px); /* 모바일에서는 텍스트를 더 위로 올림 */
+  }
 }
 </style>
 </head>
@@ -146,7 +140,6 @@ const shadowFlap = document.querySelector('.shadow-flap');
 const letter = document.querySelector('.letter');
 const front = document.querySelector('.front');
 
-/* ✨ 편지/봉투 애니메이션 값 ✨ */
 const flapRotationDuration = 1000;
 const letterUpDistance = -180;
 const letterUpDuration = 1000;
@@ -165,8 +158,8 @@ const letterMoveDown = 50;
 const letterRotateDuration = 800;
 
 const bgTransitionDelay = 1500;
-const textScrollDistance = 200;   // 자동 스크롤 이동거리
-const textScrollDuration = 1000;  // 자동 스크롤 시간
+const textScrollDistance = 170;
+const textScrollDuration = 1000;
 const textStaggerDelay = 700;
 
 const triggerSection = document.getElementById('triggerSection');
@@ -206,14 +199,13 @@ window.addEventListener('load', () => {
         textElements.forEach((el, idx) => {
           setTimeout(() => { el.classList.add('show'); }, idx * textStaggerDelay);
         });
-        smoothScrollBy(textScrollDistance, textScrollDuration); // 자동 스크롤
+        smoothScrollBy(textScrollDistance, textScrollDuration);
       }, bgTransitionDelay);
 
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
   }, 1500);
 });
 
-// 부드러운 스크롤 함수
 function smoothScrollBy(distance, duration) {
   const start = window.scrollY;
   const target = start + distance;
