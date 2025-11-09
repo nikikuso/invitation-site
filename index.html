@@ -5,31 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Envelope + Text Animation</title>
 <style>
-/* ======================
-   💡 비율 고정 래퍼 추가
-   ====================== */
 body {
   margin: 0;
   background-color: #000000;
   font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   transition: background-color 1.5s ease;
   overflow-x: hidden;
-  display: flex;
-  justify-content: center;
 }
 
-/* 아이폰 11 기준 화면 크기 (375x812) */
-.scale-wrapper {
-  width: 375px;
-  height: 812px;
-  transform: scale(calc(100vw / 375));
-  transform-origin: top center;
-  overflow: hidden;
-}
-
-/* ======================
-   기존 스타일 유지
-   ====================== */
+/* envelope 섹션 */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -81,12 +65,11 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
-  transform: translateY(-220px); /* ← 텍스트 전체 위치 (조정 포인트) */
+  transform: translateY(-200px); /* PC/모바일 동일 위치 */
   opacity: 0;
   transition: opacity 1s ease;
 }
 
-/* 텍스트 애니메이션 */
 .jungle-cont__title,
 .jungle-cont__sub,
 .jungle-cont__desc {
@@ -102,58 +85,48 @@ body {
   filter: blur(0);
 }
 
-/* 색상/폰트 크기 */
 .jungle-cont__title,
 .jungle-cont__sub { color: #c60000; }
 .jungle-cont__desc { color: #000000; }
 
-.jungle-cont__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.8rem; } /* 🔧 제목 크기/간격 */
-.jungle-cont__sub { font-size: 0.9rem; margin-bottom: 0.8rem; } /* 🔧 부제 크기/간격 */
-.jungle-cont__desc { font-size: 0.8rem; line-height: 1.6; max-width: 800px; padding: 0 1rem; } /* 🔧 설명 */
+.jungle-cont__title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; }
+.jungle-cont__sub { font-size: 1rem; margin-bottom: 1rem; }
+.jungle-cont__desc { font-size: 0.9rem; line-height: 1.8; max-width: 800px; padding: 0 1rem; }
 
 .trigger-active { opacity: 1; }
 
-/* 모바일 사이즈에서도 동일하게 작동 */
 @media (max-width: 480px) {
-  .scale-wrapper {
-    transform: scale(1);
-    width: 100%;
-    height: 100vh;
-  }
-  .trigger-section { transform: translateY(-200px); }
+  .envelope { width: 250px; height: 170px; }
 }
 </style>
 </head>
 <body>
 
-<!-- 💡 추가된 래퍼 -->
-<div class="scale-wrapper">
-  <section class="hero">
-    <div class="envelope">
-      <div class="envelope-body">
-        <img src="envelope-back.png" class="back" alt="봉투 뒷면">
-        <img src="envelope-shadow-flap.png" class="shadow-flap" alt="뚜껑 그림자">
-        <img src="envelope-front.png" class="front" alt="봉투 앞면">
-        <img src="envelope-flap.png" class="flap" alt="봉투 뚜껑">
-      </div>
-      <img src="letter.png" class="letter" alt="편지">
+<section class="hero">
+  <div class="envelope">
+    <div class="envelope-body">
+      <img src="envelope-back.png" class="back" alt="봉투 뒷면">
+      <img src="envelope-shadow-flap.png" class="shadow-flap" alt="뚜껑 그림자">
+      <img src="envelope-front.png" class="front" alt="봉투 앞면">
+      <img src="envelope-flap.png" class="flap" alt="봉투 뚜껑">
     </div>
-  </section>
+    <img src="letter.png" class="letter" alt="편지">
+  </div>
+</section>
 
-  <section class="trigger-section" id="triggerSection">
-    <div class="jungle-cont__copy">
-      <p class="jungle-cont__title">당신을 초대합니다</p>
-      <p class="jungle-cont__sub">조선대학교 시각디자인학과 75th 졸업전시회</p>
-      <p class="jungle-cont__desc">
-        빛과 색, 형태로 세상을 표현한 여러분의 여정에 박수를 보냅니다.<br>
-        <span>수많은 고민과 시도가 모여 오늘의 전시를 만들었네요.<br>
-        당신의 디자인이 앞으로도 세상에 새로운 시선을 더해주길 바랍니다.</span><br><br>
-        <span>이 여정의 끝이 또 다른 시작이 되기를 응원합니다.<br>
-        시각디자인학과 졸업전시회를 진심으로 축하드립니다!</span><br><br>
-      </p>
-    </div>
-  </section>
-</div>
+<section class="trigger-section" id="triggerSection">
+  <div class="jungle-cont__copy">
+    <p class="jungle-cont__title">당신을 초대합니다</p>
+    <p class="jungle-cont__sub">조선대학교 시각디자인학과 75th 졸업전시회</p>
+    <p class="jungle-cont__desc">
+      빛과 색, 형태로 세상을 표현한 여러분의 여정에 박수를 보냅니다.<br>
+      <span>수많은 고민과 시도가 모여 오늘의 전시를 만들었네요.<br>
+      당신의 디자인이 앞으로도 세상에 새로운 시선을 더해주길 바랍니다.</span><br><br>
+      <span>이 여정의 끝이 또 다른 시작이 되기를 응원합니다.<br>
+      시각디자인학과 졸업전시회를 진심으로 축하드립니다!</span><br><br>
+    </p>
+  </div>
+</section>
 
 <script>
 const envelope = document.querySelector('.envelope');
@@ -164,36 +137,33 @@ const letter = document.querySelector('.letter');
 const front = document.querySelector('.front');
 
 /* ✨ 편지/봉투 애니메이션 값 ✨ */
-const flapRotationDuration = 1000;   // flap 회전 속도 (ms)
-const letterUpDistance = -180;       // 편지 위로 이동 거리 (px)
-const letterUpDuration = 1000;        // 편지 위로 올라가는 시간 (ms)
-const letterStayDuration = 200;      // 편지 위에 머무르는 시간 (ms)
-const letterDownDistance = 0;        // 편지 내려갈 기본 위치 (px)
-const letterDownDuration = 1000;      // 편지 내려가는 시간 (ms)
+const flapRotationDuration = 1000;
+const letterUpDistance = -180;
+const letterUpDuration = 1000;
+const letterStayDuration = 200;
+const letterDownDistance = 0;
+const letterDownDuration = 1000;
 
-const bodyRotateDegree = 10;         // 봉투 그룹 회전 각도 (deg)
-const bodyMoveRight = 40;            // 봉투 오른쪽 이동 거리 (px)
-const bodyMoveUp = -10;              // 봉투 위로 이동 거리 (px)
-const bodyMoveDuration = 700;        // 봉투 이동/회전 시간 (ms)
+const bodyRotateDegree = 10;
+const bodyMoveRight = 40;
+const bodyMoveUp = -10;
+const bodyMoveDuration = 700;
 
-const letterRotateDegree = -10;      // 편지 회전 각도 (deg)
-const letterMoveLeft = 40;           // 편지 왼쪽 이동 거리 (px)
-const letterMoveDown = 50;           // 편지 아래 이동 거리 (px)
-const letterRotateDuration = 800;    // 편지 이동/회전 시간 (ms)
+const letterRotateDegree = -10;
+const letterMoveLeft = 40;
+const letterMoveDown = 50;
+const letterRotateDuration = 800;
 
-/* ✨ 배경/텍스트 애니메이션 값 ✨ */
-const bgTransitionDelay = 1500;      // 편지 이동 끝난 후 배경 전환까지 딜레이 (ms)
-const textScrollDistance = 100;      // 스크롤 거리 (px)
-const textScrollDuration = 1000;     // 스크롤 시간 (ms)
-const textStaggerDelay = 700;        // 텍스트 순차 등장 딜레이 (ms)
+const bgTransitionDelay = 1500;
+const textScrollDistance = 100;   // 자동 스크롤 이동거리
+const textScrollDuration = 1000;   // 자동 스크롤 시간
+const textStaggerDelay = 700;
 
-/* ✨ 텍스트 요소 ✨ */
 const triggerSection = document.getElementById('triggerSection');
 const textElements = document.querySelectorAll('.jungle-cont__title, .jungle-cont__sub, .jungle-cont__desc');
 
 window.addEventListener('load', () => {
   setTimeout(() => {
-    // flap 열기
     flap.style.transition = `transform ${flapRotationDuration}ms ease-in-out`;
     flap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
 
@@ -201,7 +171,6 @@ window.addEventListener('load', () => {
     shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
     shadowFlap.style.opacity = 1;
 
-    // 편지 올라오기
     setTimeout(() => {
       flap.style.zIndex = 2;
       shadowFlap.style.zIndex = 3;
@@ -210,7 +179,8 @@ window.addEventListener('load', () => {
       letter.style.transform = `translateY(${letterUpDistance}px)`;
     }, flapRotationDuration + 50);
 
-    // 편지 내려오며 회전/이동
+    setTimeout(() => { letter.style.zIndex = 6; }, flapRotationDuration + 50 + letterUpDuration);
+
     setTimeout(() => {
       letter.style.transition = `transform ${letterRotateDuration}ms ease-in-out`;
       letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterDownDistance + letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
@@ -220,20 +190,20 @@ window.addEventListener('load', () => {
 
       front.style.zIndex = 5;
 
-      // 배경/텍스트/스크롤 실행
       setTimeout(() => {
         document.body.style.backgroundColor = '#ffffff';
         triggerSection.classList.add('trigger-active');
         textElements.forEach((el, idx) => {
           setTimeout(() => { el.classList.add('show'); }, idx * textStaggerDelay);
         });
-        smoothScrollBy(textScrollDistance, textScrollDuration);
+        smoothScrollBy(textScrollDistance, textScrollDuration); // ← 자동 스크롤 호출
       }, bgTransitionDelay);
+
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
-  }, 1500); // load 후 시작 딜레이
+  }, 1500);
 });
 
-// 부드러운 스크롤
+// 부드러운 스크롤 함수
 function smoothScrollBy(distance, duration) {
   const start = window.scrollY;
   const target = start + distance;
@@ -246,6 +216,7 @@ function smoothScrollBy(distance, duration) {
     window.scrollTo(0, start + (target - start) * ease);
     if (progress < 1) requestAnimationFrame(step);
   }
+
   requestAnimationFrame(step);
 }
 </script>
