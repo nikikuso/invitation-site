@@ -65,7 +65,7 @@ body {
   align-items: center;
   text-align: center;
   min-height: 100vh;
-  transform: translateY(-200px); /* PC/모바일 동일 위치 */
+  transform: translateY(-200px); /* PC 기준 위치 */
   opacity: 0;
   transition: opacity 1s ease;
 }
@@ -95,8 +95,12 @@ body {
 
 .trigger-active { opacity: 1; }
 
+/* 모바일 전용 위치 조정 */
 @media (max-width: 480px) {
   .envelope { width: 250px; height: 170px; }
+  .trigger-section {
+    transform: translateY(-300px); /* 모바일에서는 텍스트를 더 위로 올림 */
+  }
 }
 </style>
 </head>
@@ -136,7 +140,6 @@ const shadowFlap = document.querySelector('.shadow-flap');
 const letter = document.querySelector('.letter');
 const front = document.querySelector('.front');
 
-/* ✨ 편지/봉투 애니메이션 값 ✨ */
 const flapRotationDuration = 1000;
 const letterUpDistance = -180;
 const letterUpDuration = 1000;
@@ -155,8 +158,8 @@ const letterMoveDown = 50;
 const letterRotateDuration = 800;
 
 const bgTransitionDelay = 1500;
-const textScrollDistance = 100;   // 자동 스크롤 이동거리
-const textScrollDuration = 1000;   // 자동 스크롤 시간
+const textScrollDistance = 100;
+const textScrollDuration = 1000;
 const textStaggerDelay = 700;
 
 const triggerSection = document.getElementById('triggerSection');
@@ -196,14 +199,13 @@ window.addEventListener('load', () => {
         textElements.forEach((el, idx) => {
           setTimeout(() => { el.classList.add('show'); }, idx * textStaggerDelay);
         });
-        smoothScrollBy(textScrollDistance, textScrollDuration); // ← 자동 스크롤 호출
+        smoothScrollBy(textScrollDistance, textScrollDuration);
       }, bgTransitionDelay);
 
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
   }, 1500);
 });
 
-// 부드러운 스크롤 함수
 function smoothScrollBy(distance, duration) {
   const start = window.scrollY;
   const target = start + distance;
