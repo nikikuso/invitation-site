@@ -11,6 +11,8 @@
   --gap-body2-body3: 300px;
   --gap-body3-body4: 300px;
   --gap-body4-body5: 100px;
+
+  /* body4 링크 위치/스타일 변수 */
   --body4-link-top: 445px;
   --body4-link-font-size: 10px;
   --body4-link-color: #ffffff;
@@ -173,16 +175,175 @@ body {
     margin-bottom: 120px; 
   }
   .body1-wrapper { margin-bottom: 200px; }
-
-  /* ✅ 모바일에서 도형 높이를 이미지와 동일하게 */
-  .body1-bg {
-    height: auto;
-    aspect-ratio: 340 / 300; /* 이미지 비율에 맞게 조정 (필요시 숫자 조정 가능) */
-  }
-
   .body4-link { top: 380px; font-size: 9px; }
+
+  /* 모바일에서 body1-bg 높이를 이미지와 같게 */
+  .body1-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 92%;
+    background-color: #efefef;
+  }
 }
 </style>
 </head>
 <body>
-<!-- 이하 동일 -->
+
+<section class="hero">
+  <div class="envelope">
+    <div class="envelope-body">
+      <img src="envelope-back.png" class="back" alt="봉투 뒷면">
+      <img src="envelope-shadow-flap.png" class="shadow-flap" alt="뚜껑 그림자">
+      <img src="envelope-front.png" class="front" alt="봉투 앞면">
+      <img src="envelope-flap.png" class="flap" alt="봉투 뚜껑">
+    </div>
+    <img src="letter.png" class="letter" alt="편지">
+  </div>
+</section>
+
+<section class="rolling-section" id="rollingSection">
+  <img src="rolling head.png" alt="Rolling Head">
+
+  <div class="body1-wrapper">
+    <div class="body1-bg"></div>
+    <img src="rolling body1.png" class="body1" alt="Rolling Body 1">
+  </div>
+
+  <img src="rolling body2.png" alt="Rolling Body 2">
+  <img src="rolling body3.png" alt="Rolling Body 3">
+
+  <div class="body4-wrapper">
+    <a class="body4-link" href="https://naver.me/GALHY9UV" target="_blank" rel="noopener noreferrer">
+      https://naver.me/GALHY9UV
+    </a>
+    <img src="rolling body4.png" class="body4" alt="Rolling Body 4">
+  </div>
+
+  <img src="rolling body5.png" alt="Rolling Body 5">
+</section>
+
+<script>
+const flapRotationDuration = 1000;
+const letterUpDistance = -180;
+const letterUpDuration = 1000;
+const letterStayDuration = 200;
+const bodyRotateDegree = 10;
+const bodyMoveRight = 40;
+const bodyMoveUp = -10;
+const bodyMoveDuration = 700;
+const letterRotateDegree = -10;
+const letterMoveLeft = 40;
+const letterMoveDown = 50;
+const letterRotateDuration = 800;
+const bgTransitionDelay = 1500;
+const textScrollDistance = 100;
+const textScrollDuration = 1000;
+
+const flap = document.querySelector('.flap');
+const shadowFlap = document.querySelector('.shadow-flap');
+const letter = document.querySelector('.letter');
+const envelopeBody = document.querySelector('.envelope-body');
+const front = document.querySelector('.front');
+const rollingSection = document.getElementById('rollingSection');
+
+const rollingBody1 = document.querySelector('.rolling-section img.body1');
+const rollingBody1Bg = document.querySelector('.body1-bg');
+const body4Link = document.querySelector('.body4-link');
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    flap.style.transition = `transform ${flapRotationDuration}ms ease-in-out`;
+    flap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+
+    shadowFlap.style.transition = `transform ${flapRotationDuration}ms ease-in-out, opacity ${flapRotationDuration/2}ms ease-in-out`;
+    shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+    shadowFlap.style.opacity = 1;
+
+    setTimeout(() => {
+      flap.style.zIndex = 2;
+      shadowFlap.style.zIndex = 3;
+      letter.style.zIndex = 4;
+      letter.style.transition = `transform ${letterUpDuration}ms ease-in-out`;
+      letter.style.transform = `translateY(${letterUpDistance}px)`;
+    }, flapRotationDuration + 50);
+
+    setTimeout(() => { letter.style.zIndex = 6; }, flapRotationDuration + 50 + letterUpDuration);
+
+    setTimeout(() => {
+      letter.style.transition = `transform ${letterRotateDuration}ms ease-in-out`;
+      letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
+
+      envelopeBody.style.transition = `transform ${bodyMoveDuration}ms ease-in-out`;
+      envelopeBody.style.transform = `translateX(${bodyMoveRight}px) translateY(${bodyMoveUp}px) rotate(${bodyRotateDegree}deg)`;
+
+      front.style.zIndex = 5;
+
+      setTimeout(() => {
+        document.body.style.backgroundColor = '#ffffff';
+        rollingSection.style.opacity = 1;
+        smoothScrollBy(textScrollDistance, textScrollDuration);
+        initObservers();
+        adjustBody1BgHeight(); // 모바일 높이 적용
+      }, bgTransitionDelay);
+    }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
+  }, 1500);
+});
+
+function smoothScrollBy(distance, duration) {
+  const start = window.scrollY;
+  const target = start + distance;
+  const startTime = performance.now();
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    window.scrollTo(0, start + (target - start) * ease);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function initObservers(){
+  if (rollingBody1 && rollingBody1Bg) {
+    const observerBody1 = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          rollingBody1.classList.add('visible');
+          rollingBody1Bg.classList.add('visible');
+          observerBody1.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.35 });
+    observerBody1.observe(rollingBody1);
+  }
+
+  const others = document.querySelectorAll('.rolling-section img:not(.body1)');
+  const observerOthers = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target.classList.contains('body4') && body4Link) {
+          body4Link.classList.add('visible');
+        }
+        observerOthers.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  others.forEach(img => observerOthers.observe(img));
+}
+
+// 모바일에서 .body1-bg 높이를 이미지와 동일하게
+function adjustBody1BgHeight() {
+  const body1 = document.querySelector('.rolling-section img.body1');
+  const body1Bg = document.querySelector('.body1-bg');
+  if (body1 && body1Bg && window.innerWidth <= 480) {
+    body1Bg.style.height = body1.offsetHeight + 'px';
+  }
+}
+window.addEventListener('resize', adjustBody1BgHeight);
+</script>
+
+</body>
+</html>
