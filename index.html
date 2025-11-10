@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Envelope + Text Animation</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Envelope + Rolling Sequence (순서 수정)</title>
 <style>
+:root{
+  --gap-head-body1: 200px;
+  --gap-body1-body2: 300px;
+  --gap-body2-body3: 300px;
+  --gap-body3-body4: 300px;
+  --gap-body4-body5: 100px;
+
+  /* body4 링크 위치/스타일 변수 */
+  --body4-link-top: 445px;
+  --body4-link-font-size: 10px;
+  --body4-link-color: #ffffff;
+}
+
 body {
   margin: 0;
   background-color: #000000;
@@ -13,7 +26,6 @@ body {
   overflow-x: hidden;
 }
 
-/* envelope 섹션 */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -50,63 +62,112 @@ body {
   transition: transform 1s ease-in-out, z-index 0s linear 0s, opacity 1s ease-in-out;
 }
 
-/* 레이어 설정 */
 .back { z-index: 1; }
 .shadow-flap { z-index: 2; opacity: 0; transform-origin: top center; top: 0.5px; }
 .letter { z-index: 3; }
 .front { z-index: 5; }
 .flap { z-index: 6; transform-origin: top center; top: 0.5px; }
 
-/* 텍스트 섹션 */
-.trigger-section {
+.rolling-section {
+  background: #ffffff;
+  padding: 0 0 100px 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  text-align: center;
-  min-height: 100vh;
-  transform: translateY(-20vh); /* PC 기준 위치 */
   opacity: 0;
-  transition: opacity 1s ease;
+  transition: opacity 1.2s ease;
+  position: relative;
 }
 
-.jungle-cont__title,
-.jungle-cont__sub,
-.jungle-cont__desc {
+.rolling-section img {
+  width: 80%;
+  max-width: 400px;
   opacity: 0;
-  transform: translateY(40px);
-  filter: blur(8px);
-  transition: all 1s ease-out;
+  transform: translateY(50px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  display: block;
 }
 
-.show {
+.rolling-section img:first-child {
+  margin-top: -150px;
+  margin-bottom: var(--gap-head-body1);
+}
+
+.body1-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: var(--gap-body1-body2);
+}
+
+.rolling-section img[src*="body2"] { margin-bottom: var(--gap-body2-body3); }
+.rolling-section img[src*="body3"] { margin-bottom: var(--gap-body3-body4); }
+.rolling-section img[src*="body4"] { margin-bottom: var(--gap-body4-body5); }
+
+.body1-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: #efefef;
+  z-index: 0;
+  transform: translateX(-80px);
+  opacity: 0;
+  transition: transform 2s ease, opacity 2s ease;
+}
+
+.rolling-section img.body1 {
+  position: relative;
+  z-index: 1;
+  width: 80%;
+  max-width: 400px;
+  transform: translateX(-80px);
+  opacity: 0;
+  transition: transform 2s ease, opacity 2s ease;
+}
+
+.body1-bg.visible { transform: translateX(0); opacity: 1; }
+.rolling-section img.body1.visible { transform: translateX(0); opacity: 1; }
+.rolling-section img.visible:not(.body1) { transform: translateY(0); opacity: 1; }
+
+/* body4 wrapper + 링크 */
+.body4-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--gap-body4-body5);
+}
+
+.body4-link {
+  position: absolute;
+  top: var(--body4-link-top);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 3;
+  color: var(--body4-link-color);
+  font-size: var(--body4-link-font-size);
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  text-decoration: underline;
+  opacity: 0;
+  transition: opacity 1s ease, transform 1s ease;
+  pointer-events: auto;
+  background: transparent;
+}
+
+/* fade-in 효과 */
+.body4-link.visible {
   opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
+  transform: translateX(-50%) translateY(0);
 }
 
-.jungle-cont__title,
-.jungle-cont__sub { color: #c60000; }
-.jungle-cont__desc { color: #000000; }
-
-.jungle-cont__title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; }
-.jungle-cont__sub { font-size: 1rem; margin-bottom: 1rem; }
-.jungle-cont__desc { font-size: 0.9rem; line-height: 1.8; max-width: 800px; padding: 0 1rem; }
-
-.trigger-active { opacity: 1; }
-
-/* 모바일 전용: 화면 높이에 따라 자동 위치 조정 */
 @media (max-width: 480px) {
   .envelope { width: 250px; height: 170px; }
-  .trigger-section { transform: translateY(-25vh); }
-}
-
-/* 작은 화면(iPhone mini 등) 전용 */
-@media (max-width: 375px) {
-  .trigger-section { transform: translateY(-30vh); }
-  .jungle-cont__title { font-size: 1.2rem; margin-bottom: 0.8rem; }
-  .jungle-cont__sub   { font-size: 0.9rem; margin-bottom: 0.8rem; }
-  .jungle-cont__desc  { font-size: 0.8rem; line-height: 1.6; padding: 0 0.5rem; }
+  .rolling-section img { width: 90%; }
+  .rolling-section img:first-child { margin-top: 0; }
 }
 </style>
 </head>
@@ -124,52 +185,55 @@ body {
   </div>
 </section>
 
-<section class="trigger-section" id="triggerSection">
-  <div class="jungle-cont__copy">
-    <p class="jungle-cont__title">당신을 초대합니다</p>
-    <p class="jungle-cont__sub">조선대학교 시각디자인학과 75th 졸업전시회</p>
-    <p class="jungle-cont__desc">
-      빛과 색, 형태로 세상을 표현한 여러분의 여정에 박수를 보냅니다.<br>
-      <span>수많은 고민과 시도가 모여 오늘의 전시를 만들었네요.<br>
-      당신의 디자인이 앞으로도 세상에 새로운 시선을 더해주길 바랍니다.</span><br><br>
-      <span>이 여정의 끝이 또 다른 시작이 되기를 응원합니다.<br>
-      시각디자인학과 졸업전시회를 진심으로 축하드립니다!</span><br><br>
-    </p>
+<section class="rolling-section" id="rollingSection">
+  <img src="rolling head.png" alt="Rolling Head">
+
+  <div class="body1-wrapper">
+    <div class="body1-bg"></div>
+    <img src="rolling body1.png" class="body1" alt="Rolling Body 1">
   </div>
+
+  <img src="rolling body2.png" alt="Rolling Body 2">
+  <img src="rolling body3.png" alt="Rolling Body 3">
+
+  <div class="body4-wrapper">
+    <a class="body4-link" href="https://naver.me/GALHY9UV" target="_blank" rel="noopener noreferrer">
+      https://naver.me/GALHY9UV
+    </a>
+    <img src="rolling body4.png" class="body4" alt="Rolling Body 4">
+  </div>
+
+  <img src="rolling body5.png" alt="Rolling Body 5">
 </section>
 
 <script>
-const envelope = document.querySelector('.envelope');
-const envelopeBody = document.querySelector('.envelope-body');
-const flap = document.querySelector('.flap');
-const shadowFlap = document.querySelector('.shadow-flap');
-const letter = document.querySelector('.letter');
-const front = document.querySelector('.front');
-
 const flapRotationDuration = 1000;
 const letterUpDistance = -180;
 const letterUpDuration = 1000;
 const letterStayDuration = 200;
-const letterDownDistance = 0;
-const letterDownDuration = 1000;
-
 const bodyRotateDegree = 10;
 const bodyMoveRight = 40;
 const bodyMoveUp = -10;
 const bodyMoveDuration = 700;
-
 const letterRotateDegree = -10;
 const letterMoveLeft = 40;
 const letterMoveDown = 50;
 const letterRotateDuration = 800;
-
 const bgTransitionDelay = 1500;
-const textScrollDistance = 150;
+const textScrollDistance = 100;
 const textScrollDuration = 1000;
-const textStaggerDelay = 700;
 
-const triggerSection = document.getElementById('triggerSection');
-const textElements = document.querySelectorAll('.jungle-cont__title, .jungle-cont__sub, .jungle-cont__desc');
+const flap = document.querySelector('.flap');
+const shadowFlap = document.querySelector('.shadow-flap');
+const letter = document.querySelector('.letter');
+const envelopeBody = document.querySelector('.envelope-body');
+const front = document.querySelector('.front');
+const rollingSection = document.getElementById('rollingSection');
+
+const rollingBody1 = document.querySelector('.rolling-section img.body1');
+const rollingBody1Bg = document.querySelector('.body1-bg');
+const rollingBody4 = document.querySelector('.rolling-section img.body4');
+const body4Link = document.querySelector('.body4-link');
 
 window.addEventListener('load', () => {
   setTimeout(() => {
@@ -192,7 +256,7 @@ window.addEventListener('load', () => {
 
     setTimeout(() => {
       letter.style.transition = `transform ${letterRotateDuration}ms ease-in-out`;
-      letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterDownDistance + letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
+      letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
 
       envelopeBody.style.transition = `transform ${bodyMoveDuration}ms ease-in-out`;
       envelopeBody.style.transform = `translateX(${bodyMoveRight}px) translateY(${bodyMoveUp}px) rotate(${bodyRotateDegree}deg)`;
@@ -201,13 +265,10 @@ window.addEventListener('load', () => {
 
       setTimeout(() => {
         document.body.style.backgroundColor = '#ffffff';
-        triggerSection.classList.add('trigger-active');
-        textElements.forEach((el, idx) => {
-          setTimeout(() => { el.classList.add('show'); }, idx * textStaggerDelay);
-        });
+        rollingSection.style.opacity = 1;
         smoothScrollBy(textScrollDistance, textScrollDuration);
+        initObservers();
       }, bgTransitionDelay);
-
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
   }, 1500);
 });
@@ -216,7 +277,6 @@ function smoothScrollBy(distance, duration) {
   const start = window.scrollY;
   const target = start + distance;
   const startTime = performance.now();
-
   function step(currentTime) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
@@ -224,8 +284,37 @@ function smoothScrollBy(distance, duration) {
     window.scrollTo(0, start + (target - start) * ease);
     if (progress < 1) requestAnimationFrame(step);
   }
-
   requestAnimationFrame(step);
+}
+
+function initObservers(){
+  if (rollingBody1 && rollingBody1Bg) {
+    const observerBody1 = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          rollingBody1.classList.add('visible');
+          rollingBody1Bg.classList.add('visible');
+          observerBody1.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.35 });
+    observerBody1.observe(rollingBody1);
+  }
+
+  const others = document.querySelectorAll('.rolling-section img:not(.body1)');
+  const observerOthers = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target.classList.contains('body4') && body4Link) {
+          body4Link.classList.add('visible');
+        }
+        observerOthers.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  others.forEach(img => observerOthers.observe(img));
 }
 </script>
 
