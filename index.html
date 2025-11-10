@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Envelope + Rolling Sequence (순서 수정)</title>
+<title>Envelope + Rolling Sequence (모바일 최적화)</title>
 <style>
 :root{
   --gap-head-body1: 200px;
@@ -158,16 +158,25 @@ body {
   background: transparent;
 }
 
-/* fade-in 효과 */
 .body4-link.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
+/* 📱 모바일 전용 위치 조정 */
 @media (max-width: 480px) {
-  .envelope { width: 250px; height: 170px; }
-  .rolling-section img { width: 90%; }
-  .rolling-section img:first-child { margin-top: 0; }
+  .envelope { width: 240px; height: 160px; }
+  .rolling-section img { 
+    width: 92%; 
+    max-width: 340px;
+    margin-bottom: 200px; 
+  }
+  .rolling-section img:first-child { 
+    margin-top: -60px;
+    margin-bottom: 120px; 
+  }
+  .body1-wrapper { margin-bottom: 200px; }
+  .body4-link { top: 380px; font-size: 9px; }
 }
 </style>
 </head>
@@ -207,6 +216,7 @@ body {
 </section>
 
 <script>
+/* 기존 JS 동일 */
 const flapRotationDuration = 1000;
 const letterUpDistance = -180;
 const letterUpDuration = 1000;
@@ -232,7 +242,6 @@ const rollingSection = document.getElementById('rollingSection');
 
 const rollingBody1 = document.querySelector('.rolling-section img.body1');
 const rollingBody1Bg = document.querySelector('.body1-bg');
-const rollingBody4 = document.querySelector('.rolling-section img.body4');
 const body4Link = document.querySelector('.body4-link');
 
 window.addEventListener('load', () => {
