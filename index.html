@@ -159,7 +159,6 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 📱 모바일 전용 위치 조정 */
 @media (max-width: 480px) {
   .envelope { width: 240px; height: 160px; }
   .rolling-section img { 
@@ -174,18 +173,25 @@ body {
   .body1-wrapper { margin-bottom: 200px; }
   .body4-link { top: 380px; font-size: 9px; }
 
-  /* 🔧 모바일에서 회색 배경 화면에 맞게 조정 */
+  /* ✅ 모바일에서 body1-bg 양쪽 꽉 채우기 (진짜 완전하게) */
   .body1-bg {
     position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100vw; /*화면 너비 꽉 채우기*/
+    width: 100vw;
+    min-width: 100%;
     height: 100%;
     background-color: #efefef;
-    
+    z-index: 0;
+  }
+
+  /* ✅ iOS 사파리 뷰포트 오차 방지용 */
+  html, body {
+    overflow-x: hidden;
   }
 }
+
 </style>
 </head>
 <body>
