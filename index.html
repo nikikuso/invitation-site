@@ -23,7 +23,7 @@ body {
   background-color: #000000;
   font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   transition: background-color 1.5s ease;
-  overflow-x: hidden;
+  overflow-x: hidden; /* 🔧 모바일 잘림 방지 */
 }
 
 .hero {
@@ -102,21 +102,18 @@ body {
   margin-bottom: var(--gap-body1-body2);
 }
 
-.rolling-section img[src*="body2"] { margin-bottom: var(--gap-body2-body3); }
-.rolling-section img[src*="body3"] { margin-bottom: var(--gap-body3-body4); }
-.rolling-section img[src*="body4"] { margin-bottom: var(--gap-body4-body5); }
-
+/* 🔧 수정된 회색 배경 */
 .body1-bg {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100vw;
+  left: 50%;
+  width: 100%;
   height: 100%;
   background-color: #efefef;
-  z-index: 0;
-  transform: translateX(-80px);
+  transform: translate(-50%, 0) translateX(-80px);
   opacity: 0;
   transition: transform 2s ease, opacity 2s ease;
+  box-sizing: border-box;
 }
 
 .rolling-section img.body1 {
@@ -129,7 +126,7 @@ body {
   transition: transform 2s ease, opacity 2s ease;
 }
 
-.body1-bg.visible { transform: translateX(0); opacity: 1; }
+.body1-bg.visible { transform: translate(-50%, 0); opacity: 1; }
 .rolling-section img.body1.visible { transform: translateX(0); opacity: 1; }
 .rolling-section img.visible:not(.body1) { transform: translateY(0); opacity: 1; }
 
@@ -177,13 +174,15 @@ body {
   .body1-wrapper { margin-bottom: 200px; }
   .body4-link { top: 380px; font-size: 9px; }
 
-  /* 모바일에서 body1-bg 높이를 이미지와 같게 */
+  /* 🔧 모바일에서 회색 배경 화면에 맞게 조정 */
   .body1-bg {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 92%;
+    left: 50%;
+    width: 92vw;
+    height: auto;
     background-color: #efefef;
+    transform: translateX(-50%);
   }
 }
 </style>
@@ -284,7 +283,7 @@ window.addEventListener('load', () => {
         rollingSection.style.opacity = 1;
         smoothScrollBy(textScrollDistance, textScrollDuration);
         initObservers();
-        adjustBody1BgHeight(); // 모바일 높이 적용
+        adjustBody1BgHeight();
       }, bgTransitionDelay);
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
   }, 1500);
@@ -334,7 +333,6 @@ function initObservers(){
   others.forEach(img => observerOthers.observe(img));
 }
 
-// 모바일에서 .body1-bg 높이를 이미지와 동일하게
 function adjustBody1BgHeight() {
   const body1 = document.querySelector('.rolling-section img.body1');
   const body1Bg = document.querySelector('.body1-bg');
