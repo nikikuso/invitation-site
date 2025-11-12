@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Envelope + Rolling Sequence (모바일 동일 간격)</title>
+<title>Envelope + Rolling Sequence (fixed animations)</title>
 <style>
 :root{
   --gap-head-body1: 200px;
@@ -64,8 +64,8 @@ body {
 .back { z-index: 1; }
 .shadow-flap { z-index: 2; opacity: 0; transform-origin: top center; top: 0.5px; }
 .letter { z-index: 3; }
-.front { z-index: 5; }
-.flap { z-index: 6; transform-origin: top center; top: 0.5px; }
+.front { z-index: 5; } /* 항상 앞에 남아있음 (요청) */
+.flap { z-index: 6; transform-origin: top center; top: 0.5px; } /* flap은 뒤로 가도록 JS에서 처리 */
 
 .rolling-section {
   background: #ffffff;
@@ -87,24 +87,28 @@ body {
   display: block;
 }
 
-/* 간격: 전부 변수로 통일 */
-.rolling-section img:first-child {
+/* head 아래 간격 (head는 첫번째 img) */
+.rolling-section img.head {
   margin-top: -150px;
   margin-bottom: var(--gap-head-body1);
 }
-.body1-wrapper { margin-bottom: var(--gap-body1-body2); }
-.rolling-section img[src*="body2"] { margin-bottom: var(--gap-body2-body3); }
-.rolling-section img[src*="body3"] { margin-bottom: var(--gap-body3-body4); }
-.rolling-section img[src*="body4"] { margin-bottom: var(--gap-body4-body5); }
 
+/* body1 래퍼 */
 .body1-wrapper {
   position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
   overflow: hidden;
+  margin-bottom: var(--gap-body1-body2);
 }
 
+/* body2~5 각각의 아래 마진(간격) — 클래스 기준으로 제어 */
+.rolling-section img.body2 { margin-bottom: var(--gap-body2-body3); }
+.rolling-section img.body3 { margin-bottom: var(--gap-body3-body4); }
+.rolling-section .body4-wrapper { margin-bottom: var(--gap-body4-body5); } /* body4은 wrapper로 묶음 */
+
+/* body1 배경 도형 */
 .body1-bg {
   position: absolute;
   top: 0;
@@ -118,6 +122,7 @@ body {
   transition: transform 2s ease, opacity 2s ease;
 }
 
+/* body1 이미지 (왼→오 페이드인 스타일) */
 .rolling-section img.body1 {
   position: relative;
   z-index: 1;
@@ -128,16 +133,17 @@ body {
   transition: transform 2s ease, opacity 2s ease;
 }
 
+/* visible 상태들 */
 .body1-bg.visible { transform: translateX(0); opacity: 1; }
 .rolling-section img.body1.visible { transform: translateX(0); opacity: 1; }
 .rolling-section img.visible:not(.body1) { transform: translateY(0); opacity: 1; }
 
+/* body4 wrapper + 링크 */
 .body4-wrapper {
   position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: var(--gap-body4-body5);
 }
 
 .body4-link {
@@ -148,6 +154,7 @@ body {
   z-index: 3;
   color: var(--body4-link-color);
   font-size: var(--body4-link-font-size);
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   text-decoration: underline;
   opacity: 0;
   transition: opacity 1s ease, transform 1s ease;
@@ -160,19 +167,26 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 📱 모바일 전용 — 간격 고정 제거, 변수 동일 적용 */
+/* 모바일 조정: PC와 비슷한 간격으로 좁힘, 마지막 이미지 아래 여백 제거 */
 @media (max-width: 480px) {
   .envelope { width: 240px; height: 160px; }
-  .rolling-section img { 
-    width: 92%; 
+  .rolling-section img {
+    width: 92%;
     max-width: 340px;
+    margin-bottom: 140px; /* 모바일에서 간격을 PC와 비슷하게 줄임 */
   }
-  .rolling-section img:first-child { 
+  .rolling-section img.head {
     margin-top: -60px;
-    margin-bottom: var(--gap-head-body1);
+    margin-bottom: 140px;
   }
+  .body1-wrapper { margin-bottom: 140px; }
+  .body4-wrapper { margin-bottom: 140px; }
   .body4-link { top: 380px; font-size: 9px; }
-  .body1-bg { width: 92%; background-color: #efefef; }
+
+  /* body1-bg 모바일 맞춤 */
+  .body1-bg { width: 92%; left: 0; top: 0; }
+  /* 마지막 이미지 아래 여백 없앰 */
+  .rolling-section img:last-child { margin-bottom: 0; }
 }
 </style>
 </head>
@@ -191,15 +205,18 @@ body {
 </section>
 
 <section class="rolling-section" id="rollingSection">
-  <img src="rolling head.png" alt="Rolling Head">
+  <!-- head: 클래스 head 추가 -->
+  <img src="rolling head.png" class="head" alt="Rolling Head">
 
+  <!-- body1 wrapper -->
   <div class="body1-wrapper">
     <div class="body1-bg"></div>
     <img src="rolling body1.png" class="body1" alt="Rolling Body 1">
   </div>
 
-  <img src="rolling body2.png" alt="Rolling Body 2">
-  <img src="rolling body3.png" alt="Rolling Body 3">
+  <!-- body2~body5에 명확한 클래스 추가 -->
+  <img src="rolling body2.png" class="body2" alt="Rolling Body 2">
+  <img src="rolling body3.png" class="body3" alt="Rolling Body 3">
 
   <div class="body4-wrapper">
     <a class="body4-link" href="https://naver.me/GALHY9UV" target="_blank" rel="noopener noreferrer">
@@ -208,10 +225,11 @@ body {
     <img src="rolling body4.png" class="body4" alt="Rolling Body 4">
   </div>
 
-  <img src="rolling body5.png" alt="Rolling Body 5">
+  <img src="rolling body5.png" class="body5" alt="Rolling Body 5">
 </section>
 
 <script>
+/* 기존 애니메이션 변수들 (그대로 유지) */
 const flapRotationDuration = 1000;
 const letterUpDistance = -180;
 const letterUpDuration = 1000;
@@ -228,56 +246,65 @@ const bgTransitionDelay = 1500;
 const textScrollDistance = 100;
 const textScrollDuration = 1000;
 
+/* 요소들 찾기 — 클래스들이 확실히 있어야 합니다 */
 const flap = document.querySelector('.flap');
 const shadowFlap = document.querySelector('.shadow-flap');
 const letter = document.querySelector('.letter');
 const envelopeBody = document.querySelector('.envelope-body');
 const front = document.querySelector('.front');
 const rollingSection = document.getElementById('rollingSection');
-
 const rollingBody1 = document.querySelector('.rolling-section img.body1');
 const rollingBody1Bg = document.querySelector('.body1-bg');
 const body4Link = document.querySelector('.body4-link');
+const flapImg = document.querySelector('.flap');
 
 window.addEventListener('load', () => {
+  console.log('page loaded — starting envelope animation'); // 디버깅 확인용
   setTimeout(() => {
+    // flap 열리는 애니메이션 (플랩이 뒤로 가는 타이밍 처리)
     flap.style.transition = `transform ${flapRotationDuration}ms ease-in-out`;
     flap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
 
-    shadowFlap.style.transition = `transform ${flapRotationDuration}ms ease-in-out, opacity ${flapRotationDuration/2}ms ease-in-out`;
-    shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
-    shadowFlap.style.opacity = 1;
+    // 그림자 플랩
+    if (shadowFlap) {
+      shadowFlap.style.transition = `transform ${flapRotationDuration}ms ease-in-out, opacity ${flapRotationDuration/2}ms ease-in-out`;
+      shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+      shadowFlap.style.opacity = 1;
+    }
 
     setTimeout(() => {
-      flap.style.zIndex = 2;
-      shadowFlap.style.zIndex = 3;
+      // flap을 뒤로 보내고 letter를 위로
+      flap.style.zIndex = 2;          // flap을 잠시 뒤로
+      if (shadowFlap) shadowFlap.style.zIndex = 3;
       letter.style.zIndex = 4;
       letter.style.transition = `transform ${letterUpDuration}ms ease-in-out`;
       letter.style.transform = `translateY(${letterUpDistance}px)`;
     }, flapRotationDuration + 50);
 
-    setTimeout(() => { letter.style.zIndex = 6; }, flapRotationDuration + 50 + letterUpDuration);
-
     setTimeout(() => {
+      // 편지 회전 + envelope 바디 기울기
       letter.style.transition = `transform ${letterRotateDuration}ms ease-in-out`;
       letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
 
       envelopeBody.style.transition = `transform ${bodyMoveDuration}ms ease-in-out`;
       envelopeBody.style.transform = `translateX(${bodyMoveRight}px) translateY(${bodyMoveUp}px) rotate(${bodyRotateDegree}deg)`;
 
-      front.style.zIndex = 5;
+      // front은 항상 앞 (요청사항)
+      if (front) front.style.zIndex = 5;
 
       setTimeout(() => {
+        // 배경(페이지) 흰색 전환 및 rolling 표시
         document.body.style.backgroundColor = '#ffffff';
         rollingSection.style.opacity = 1;
         smoothScrollBy(textScrollDistance, textScrollDuration);
         initObservers();
-        adjustBody1BgHeight(); 
+        adjustBody1BgHeight();
       }, bgTransitionDelay);
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
   }, 1500);
 });
 
+/* 부드러운 스크롤 함수 */
 function smoothScrollBy(distance, duration) {
   const start = window.scrollY;
   const target = start + distance;
@@ -292,7 +319,9 @@ function smoothScrollBy(distance, duration) {
   requestAnimationFrame(step);
 }
 
+/* IntersectionObserver — body1(배경 포함)과 나머지 이미지 처리 */
 function initObservers(){
+  // body1
   if (rollingBody1 && rollingBody1Bg) {
     const observerBody1 = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -306,11 +335,14 @@ function initObservers(){
     observerBody1.observe(rollingBody1);
   }
 
+  // 나머지 이미지들 (head, body2, body3, body4, body5)
   const others = document.querySelectorAll('.rolling-section img:not(.body1)');
   const observerOthers = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
+
+        // body4이면 wrapper의 링크도 함께 보이게
         if (entry.target.classList.contains('body4') && body4Link) {
           body4Link.classList.add('visible');
         }
@@ -322,6 +354,7 @@ function initObservers(){
   others.forEach(img => observerOthers.observe(img));
 }
 
+/* 모바일에서 .body1-bg 높이를 이미지와 동일하게 */
 function adjustBody1BgHeight() {
   const body1 = document.querySelector('.rolling-section img.body1');
   const body1Bg = document.querySelector('.body1-bg');
