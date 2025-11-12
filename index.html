@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Envelope + Rolling Sequence (모바일 최적화)</title>
+<title>Envelope + Rolling Sequence (모바일 동일 간격)</title>
 <style>
 :root{
   --gap-head-body1: 200px;
@@ -12,7 +12,6 @@
   --gap-body3-body4: 300px;
   --gap-body4-body5: 100px;
 
-  /* body4 링크 위치/스타일 변수 */
   --body4-link-top: 445px;
   --body4-link-font-size: 10px;
   --body4-link-color: #ffffff;
@@ -88,10 +87,15 @@ body {
   display: block;
 }
 
+/* 간격: 전부 변수로 통일 */
 .rolling-section img:first-child {
   margin-top: -150px;
   margin-bottom: var(--gap-head-body1);
 }
+.body1-wrapper { margin-bottom: var(--gap-body1-body2); }
+.rolling-section img[src*="body2"] { margin-bottom: var(--gap-body2-body3); }
+.rolling-section img[src*="body3"] { margin-bottom: var(--gap-body3-body4); }
+.rolling-section img[src*="body4"] { margin-bottom: var(--gap-body4-body5); }
 
 .body1-wrapper {
   position: relative;
@@ -99,12 +103,7 @@ body {
   display: flex;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: var(--gap-body1-body2);
 }
-
-.rolling-section img[src*="body2"] { margin-bottom: var(--gap-body2-body3); }
-.rolling-section img[src*="body3"] { margin-bottom: var(--gap-body3-body4); }
-.rolling-section img[src*="body4"] { margin-bottom: var(--gap-body4-body5); }
 
 .body1-bg {
   position: absolute;
@@ -149,7 +148,6 @@ body {
   z-index: 3;
   color: var(--body4-link-color);
   font-size: var(--body4-link-font-size);
-  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   text-decoration: underline;
   opacity: 0;
   transition: opacity 1s ease, transform 1s ease;
@@ -162,29 +160,19 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 📱 모바일 전용 위치 조정 */
+/* 📱 모바일 전용 — 간격 고정 제거, 변수 동일 적용 */
 @media (max-width: 480px) {
   .envelope { width: 240px; height: 160px; }
   .rolling-section img { 
     width: 92%; 
     max-width: 340px;
-    margin-bottom: 200px; 
   }
   .rolling-section img:first-child { 
     margin-top: -60px;
-    margin-bottom: 120px; 
+    margin-bottom: var(--gap-head-body1);
   }
-  .body1-wrapper { margin-bottom: 200px; }
   .body4-link { top: 380px; font-size: 9px; }
-
-  /* 모바일에서 body1-bg 높이를 이미지와 같게 */
-  .body1-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 92%;
-    background-color: #efefef;
-  }
+  .body1-bg { width: 92%; background-color: #efefef; }
 }
 </style>
 </head>
@@ -284,7 +272,7 @@ window.addEventListener('load', () => {
         rollingSection.style.opacity = 1;
         smoothScrollBy(textScrollDistance, textScrollDuration);
         initObservers();
-        adjustBody1BgHeight(); // 모바일 높이 적용
+        adjustBody1BgHeight(); 
       }, bgTransitionDelay);
     }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
   }, 1500);
@@ -334,7 +322,6 @@ function initObservers(){
   others.forEach(img => observerOthers.observe(img));
 }
 
-// 모바일에서 .body1-bg 높이를 이미지와 동일하게
 function adjustBody1BgHeight() {
   const body1 = document.querySelector('.rolling-section img.body1');
   const body1Bg = document.querySelector('.body1-bg');
