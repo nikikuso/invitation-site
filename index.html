@@ -173,11 +173,15 @@ body {
   .envelope { width: 240px; height: 160px; }
   .rolling-section img { width: 92%; max-width: 340px; }
 
-  /* head 위치 위로 이동 + 그냥 자리 고정 */
+  /* head 위치 위로 이동 + 화면 고정 */
   .rolling-section img.head {
-    margin-top: -260px; /* 원래 -60px → -260px */
+    margin-top: -260px;
     margin-bottom: var(--gap-head-body1);
-    position: static; /* sticky 제거 */
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
   }
 
   .body1-wrapper { margin-bottom: var(--gap-body1-body2); }
@@ -231,7 +235,6 @@ body {
 </section>
 
 <script>
-/* 기존 JS 그대로 유지 */
 const flapRotationDuration = 1000;
 const letterUpDistance = -180;
 const letterUpDuration = 1000;
