@@ -126,6 +126,11 @@ body {
   transition: transform 2s ease, opacity 2s ease;
 }
 
+.rolling-section img.body2 {
+  width: 90%; /* 기존 80% → 90% 확대 */
+  max-width: 400px;
+}
+
 .body1-bg.visible { transform: translate(-50%, 0); opacity: 1; }
 .rolling-section img.body1.visible { transform: translateX(0); opacity: 1; }
 .rolling-section img.visible:not(.body1) { transform: translateY(0); opacity: 1; }
@@ -167,7 +172,7 @@ body {
     margin-bottom: 200px; 
   }
   .rolling-section img:first-child { 
-    margin-top: -60px;
+    margin-top: -px;
     margin-bottom: 120px; 
   }
   .body1-wrapper { margin-bottom: 200px; }
@@ -216,7 +221,7 @@ body {
     <img src="rolling body1.png" class="body1" alt="Rolling Body 1">
   </div>
 
-  <img src="rolling body2.png" alt="Rolling Body 2">
+  <img src="rolling body2.png" class="body2" alt="Rolling Body 2">
   <img src="rolling body3.png" alt="Rolling Body 3">
 
   <div class="body4-wrapper">
