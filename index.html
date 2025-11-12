@@ -1,4 +1,11 @@
-:root {
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Envelope + Rolling Sequence (fixed animations)</title>
+<style>
+:root{
   --gap-head-body1: 200px;
   --gap-body1-body2: 300px;
   --gap-body2-body3: 300px;
@@ -10,10 +17,152 @@
   --body4-link-color: #ffffff;
 }
 
-/* 📱 모바일 전용 위치 및 간격 최적화 */
+body {
+  margin: 0;
+  background-color: #000000;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  transition: background-color 1.5s ease;
+  overflow-x: hidden;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.envelope {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.envelope-body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transform-origin: center center;
+}
+
+.envelope img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  top: 0;
+  left: 0;
+  transition: transform 1s ease-in-out, z-index 0s linear 0s, opacity 1s ease-in-out;
+}
+
+.back { z-index: 1; }
+.shadow-flap { z-index: 2; opacity: 0; transform-origin: top center; top: 0.5px; }
+.letter { z-index: 3; }
+.front { z-index: 5; }
+.flap { z-index: 6; transform-origin: top center; top: 0.5px; }
+
+.rolling-section {
+  background: #ffffff;
+  padding: 0 0 100px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  position: relative;
+}
+
+.rolling-section img {
+  width: 80%;
+  max-width: 400px;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  display: block;
+}
+
+.rolling-section img.head {
+  margin-top: -150px;
+  margin-bottom: var(--gap-head-body1);
+}
+
+.body1-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: var(--gap-body1-body2);
+}
+
+.rolling-section img.body2 { margin-bottom: var(--gap-body2-body3); }
+.rolling-section img.body3 { margin-bottom: var(--gap-body3-body4); }
+.rolling-section .body4-wrapper { margin-bottom: var(--gap-body4-body5); }
+
+.body1-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: #efefef;
+  z-index: 0;
+  transform: translateX(-80px);
+  opacity: 0;
+  transition: transform 2s ease, opacity 2s ease;
+}
+
+.rolling-section img.body1 {
+  position: relative;
+  z-index: 1;
+  width: 80%;
+  max-width: 400px;
+  transform: translateX(-80px);
+  opacity: 0;
+  transition: transform 2s ease, opacity 2s ease;
+}
+
+.body1-bg.visible { transform: translateX(0); opacity: 1; }
+.rolling-section img.body1.visible { transform: translateX(0); opacity: 1; }
+.rolling-section img.visible:not(.body1) { transform: translateY(0); opacity: 1; }
+
+.body4-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.body4-link {
+  position: absolute;
+  top: var(--body4-link-top);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 3;
+  color: var(--body4-link-color);
+  font-size: var(--body4-link-font-size);
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  text-decoration: underline;
+  opacity: 0;
+  transition: opacity 1s ease, transform 1s ease;
+  pointer-events: auto;
+  background: transparent;
+}
+
+.body4-link.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ✅ 모바일 간격 수정 + 마지막 이미지 하단 여백 제거 */
 @media (max-width: 480px) {
   :root {
-    /* 📏 모바일용 간격을 PC보다 살짝 압축 */
     --gap-head-body1: 120px;
     --gap-body1-body2: 160px;
     --gap-body2-body3: 160px;
@@ -21,48 +170,178 @@
     --gap-body4-body5: 80px;
   }
 
-  .envelope {
-    width: 240px;
-    height: 160px;
+  .envelope { width: 240px; height: 160px; }
+  .rolling-section img { width: 92%; max-width: 340px; }
+
+  .rolling-section img.head { margin-top: -60px; margin-bottom: var(--gap-head-body1); }
+  .body1-wrapper { margin-bottom: var(--gap-body1-body2); }
+  .rolling-section img.body2 { margin-bottom: var(--gap-body2-body3); }
+  .rolling-section img.body3 { margin-bottom: var(--gap-body3-body4); }
+  .body4-wrapper { margin-bottom: var(--gap-body4-body5); }
+
+  .body4-link { top: 380px; font-size: 9px; }
+
+  .body1-bg { width: 92%; left: 0; top: 0; }
+
+  /* 마지막 이미지 아래 여백 제거 */
+  .rolling-section img:last-child { margin-bottom: 0; }
+  .rolling-section { padding-bottom: 10px; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="envelope">
+    <div class="envelope-body">
+      <img src="envelope-back.png" class="back" alt="봉투 뒷면">
+      <img src="envelope-shadow-flap.png" class="shadow-flap" alt="뚜껑 그림자">
+      <img src="envelope-front.png" class="front" alt="봉투 앞면">
+      <img src="envelope-flap.png" class="flap" alt="봉투 뚜껑">
+    </div>
+    <img src="letter.png" class="letter" alt="편지">
+  </div>
+</section>
+
+<section class="rolling-section" id="rollingSection">
+  <img src="rolling head.png" class="head" alt="Rolling Head">
+
+  <div class="body1-wrapper">
+    <div class="body1-bg"></div>
+    <img src="rolling body1.png" class="body1" alt="Rolling Body 1">
+  </div>
+
+  <img src="rolling body2.png" class="body2" alt="Rolling Body 2">
+  <img src="rolling body3.png" class="body3" alt="Rolling Body 3">
+
+  <div class="body4-wrapper">
+    <a class="body4-link" href="https://naver.me/GALHY9UV" target="_blank" rel="noopener noreferrer">
+      https://naver.me/GALHY9UV
+    </a>
+    <img src="rolling body4.png" class="body4" alt="Rolling Body 4">
+  </div>
+
+  <img src="rolling body5.png" class="body5" alt="Rolling Body 5">
+</section>
+
+<script>
+const flapRotationDuration = 1000;
+const letterUpDistance = -180;
+const letterUpDuration = 1000;
+const letterStayDuration = 200;
+const bodyRotateDegree = 10;
+const bodyMoveRight = 40;
+const bodyMoveUp = -10;
+const bodyMoveDuration = 700;
+const letterRotateDegree = -10;
+const letterMoveLeft = 40;
+const letterMoveDown = 50;
+const letterRotateDuration = 800;
+const bgTransitionDelay = 1500;
+const textScrollDistance = 100;
+const textScrollDuration = 1000;
+
+const flap = document.querySelector('.flap');
+const shadowFlap = document.querySelector('.shadow-flap');
+const letter = document.querySelector('.letter');
+const envelopeBody = document.querySelector('.envelope-body');
+const front = document.querySelector('.front');
+const rollingSection = document.getElementById('rollingSection');
+const rollingBody1 = document.querySelector('.rolling-section img.body1');
+const rollingBody1Bg = document.querySelector('.body1-bg');
+const body4Link = document.querySelector('.body4-link');
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    flap.style.transition = `transform ${flapRotationDuration}ms ease-in-out`;
+    flap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+
+    shadowFlap.style.transition = `transform ${flapRotationDuration}ms ease-in-out, opacity ${flapRotationDuration/2}ms ease-in-out`;
+    shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+    shadowFlap.style.opacity = 1;
+
+    setTimeout(() => {
+      flap.style.zIndex = 2;
+      shadowFlap.style.zIndex = 3;
+      letter.style.zIndex = 4;
+      letter.style.transition = `transform ${letterUpDuration}ms ease-in-out`;
+      letter.style.transform = `translateY(${letterUpDistance}px)`;
+    }, flapRotationDuration + 50);
+
+    setTimeout(() => {
+      letter.style.zIndex = 6;
+      letter.style.transition = `transform ${letterRotateDuration}ms ease-in-out`;
+      letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
+
+      envelopeBody.style.transition = `transform ${bodyMoveDuration}ms ease-in-out`;
+      envelopeBody.style.transform = `translateX(${bodyMoveRight}px) translateY(${bodyMoveUp}px) rotate(${bodyRotateDegree}deg)`;
+
+      front.style.zIndex = 5;
+
+      setTimeout(() => {
+        document.body.style.backgroundColor = '#ffffff';
+        rollingSection.style.opacity = 1;
+        smoothScrollBy(textScrollDistance, textScrollDuration);
+        initObservers();
+        adjustBody1BgHeight();
+      }, bgTransitionDelay);
+    }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
+  }, 1500);
+});
+
+function smoothScrollBy(distance, duration) {
+  const start = window.scrollY;
+  const target = start + distance;
+  const startTime = performance.now();
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    window.scrollTo(0, start + (target - start) * ease);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function initObservers(){
+  if (rollingBody1 && rollingBody1Bg) {
+    const observerBody1 = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          rollingBody1.classList.add('visible');
+          rollingBody1Bg.classList.add('visible');
+          observerBody1.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.35 });
+    observerBody1.observe(rollingBody1);
   }
 
-  .rolling-section img {
-    width: 92%;
-    max-width: 340px;
-    /* 각 이미지 아래 여백은 위 변수들로 통제되므로 별도 margin-bottom 제거 */
-    margin-bottom: 0;
-  }
+  const others = document.querySelectorAll('.rolling-section img:not(.body1)');
+  const observerOthers = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        if (entry.target.classList.contains('body4') && body4Link) {
+          body4Link.classList.add('visible');
+        }
+        observerOthers.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
 
-  /* head ~ body1 간격 보정 */
-  .rolling-section img:first-child {
-    margin-top: -60px;
-    margin-bottom: var(--gap-head-body1);
-  }
+  others.forEach(img => observerOthers.observe(img));
+}
 
-  .rolling-section img[src*="body2"] { margin-bottom: var(--gap-body2-body3); }
-  .rolling-section img[src*="body3"] { margin-bottom: var(--gap-body3-body4); }
-  .rolling-section img[src*="body4"] { margin-bottom: var(--gap-body4-body5); }
-
-  .body1-wrapper {
-    margin-bottom: var(--gap-body1-body2);
-  }
-
-  /* 🔽 body5 끝에서 화면이 자연스럽게 끝나도록 */
-  .rolling-section {
-    padding-bottom: 10px;
-  }
-
-  .body4-link {
-    top: 380px;
-    font-size: 9px;
-  }
-
-  /* 모바일에서 body1-bg 높이를 이미지와 같게 */
-  .body1-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 92%;
-    background-color: #efefef;
+function adjustBody1BgHeight() {
+  const body1 = document.querySelector('.rolling-section img.body1');
+  const body1Bg = document.querySelector('.body1-bg');
+  if (body1 && body1Bg && window.innerWidth <= 480) {
+    body1Bg.style.height = body1.offsetHeight + 'px';
   }
 }
+window.addEventListener('resize', adjustBody1BgHeight);
+</script>
+
+</body>
+</html>
