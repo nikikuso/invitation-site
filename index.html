@@ -6,11 +6,11 @@
 <title>Envelope + Rolling Sequence (모바일 최적화)</title>
 <style>
 :root{
-  --gap-head-body1: 200px;
-  --gap-body1-body2: 300px;
-  --gap-body2-body3: 300px;
-  --gap-body3-body4: 300px;
-  --gap-body4-body5: 100px;
+  --gap-head-body1: 300px;   /* PC 기준 간격 조절 가능 */
+  --gap-body1-body2: 400px;
+  --gap-body2-body3: 400px;
+  --gap-body3-body4: 400px;
+  --gap-body4-body5: 400px;
 
   /* body4 링크 위치/스타일 변수 */
   --body4-link-top: 445px;
@@ -23,7 +23,7 @@ body {
   background-color: #000000;
   font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   transition: background-color 1.5s ease;
-  overflow-x: hidden; /* 🔧 모바일 잘림 방지 */
+  overflow-x: hidden;
 }
 
 .hero {
@@ -88,21 +88,22 @@ body {
   display: block;
 }
 
-.rolling-section img:first-child {
-  margin-top: -150px;
-  margin-bottom: var(--gap-head-body1);
-}
+/* PC 기준 이미지 간격 적용 */
+.rolling-section img:first-child { margin-bottom: var(--gap-head-body1); }
+.body1-wrapper { margin-bottom: var(--gap-body1-body2); }
+.rolling-section img.body2 { margin-bottom: var(--gap-body2-body3); }
+.rolling-section img.body3 { margin-bottom: var(--gap-body3-body4); }
+.body4-wrapper { margin-bottom: var(--gap-body4-body5); }
 
+/* body1 회색 배경 */
 .body1-wrapper {
   position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: var(--gap-body1-body2);
 }
 
-/* 🔧 수정된 회색 배경 */
 .body1-bg {
   position: absolute;
   top: 0;
@@ -126,10 +127,7 @@ body {
   transition: transform 2s ease, opacity 2s ease;
 }
 
-.rolling-section img.body2 {
-  width: 90%; /* 기존 80% → 90% 확대 */
-  max-width: 400px;
-}
+.rolling-section img.body2 { width: 90%; max-width: 400px; } /* 확대 */
 
 .body1-bg.visible { transform: translate(-50%, 0); opacity: 1; }
 .rolling-section img.body1.visible { transform: translateX(0); opacity: 1; }
@@ -140,7 +138,6 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: var(--gap-body4-body5);
 }
 
 .body4-link {
@@ -164,39 +161,18 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
+/* 모바일 반응형 */
 @media (max-width: 480px) {
   .envelope { width: 240px; height: 160px; }
-  .rolling-section img { 
-    width: 92%; 
-    max-width: 340px;
-    margin-bottom: 200px; 
-  }
-  .rolling-section img:first-child { 
-    margin-top: -px;
-    margin-bottom: 120px; 
-  }
+  .rolling-section img { width: 92%; max-width: 340px; margin-bottom: 200px; }
+  .rolling-section img:first-child { margin-bottom: 120px; }
   .body1-wrapper { margin-bottom: 200px; }
   .body4-link { top: 380px; font-size: 9px; }
 
-  /* ✅ 모바일에서 body1-bg 양쪽 꽉 채우기 (진짜 완전하게) */
-  .body1-bg {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    min-width: 100%;
-    height: 100%;
-    background-color: #efefef;
-    z-index: 0;
-  }
+  .body1-bg { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100vw; min-width: 100%; height: 100%; background-color: #efefef; z-index: 0; }
 
-  /* ✅ iOS 사파리 뷰포트 오차 방지용 */
-  html, body {
-    overflow-x: hidden;
-  }
+  html, body { overflow-x: hidden; }
 }
-
 </style>
 </head>
 <body>
@@ -215,22 +191,18 @@ body {
 
 <section class="rolling-section" id="rollingSection">
   <img src="rolling head.png" alt="Rolling Head">
-
   <div class="body1-wrapper">
     <div class="body1-bg"></div>
     <img src="rolling body1.png" class="body1" alt="Rolling Body 1">
   </div>
-
   <img src="rolling body2.png" class="body2" alt="Rolling Body 2">
   <img src="rolling body3.png" alt="Rolling Body 3">
-
   <div class="body4-wrapper">
     <a class="body4-link" href="https://naver.me/GALHY9UV" target="_blank" rel="noopener noreferrer">
       https://naver.me/GALHY9UV
     </a>
     <img src="rolling body4.png" class="body4" alt="Rolling Body 4">
   </div>
-
   <img src="rolling body5.png" alt="Rolling Body 5">
 </section>
 
