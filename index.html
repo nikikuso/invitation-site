@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Envelope + Rolling Sequence (fixed animations)</title>
+<title>Envelope + Rolling Sequence (click start + music)</title>
 <style>
 :root{
   --gap-head-body1: 200px;
@@ -118,7 +118,7 @@ body {
   z-index: 0;
   transform: translateX(-80px);
   opacity: 0;
-  transition: transform 2s ease, opacity 2s ease;
+  transition: transform 3s ease, opacity 3s ease;
 }
 
 .rolling-section img.body1 {
@@ -128,11 +128,15 @@ body {
   max-width: 400px;
   transform: translateX(-80px);
   opacity: 0;
-  transition: transform 2s ease, opacity 2s ease;
+  transition: transform 3s ease, opacity 3s ease;
 }
 
-.body1-bg.visible { transform: translateX(0); opacity: 1; }
-.rolling-section img.body1.visible { transform: translateX(0); opacity: 1; }
+.body1-wrapper.visible .body1,
+.body1-wrapper.visible .body1-bg {
+  transform: translateX(0);
+  opacity: 1;
+}
+
 .rolling-section img.visible:not(.body1) { transform: translateY(0); opacity: 1; }
 
 .body4-wrapper {
@@ -150,12 +154,10 @@ body {
   z-index: 3;
   color: var(--body4-link-color);
   font-size: var(--body4-link-font-size);
-  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   text-decoration: underline;
   opacity: 0;
   transition: opacity 1s ease, transform 1s ease;
   pointer-events: auto;
-  background: transparent;
 }
 
 .body4-link.visible {
@@ -163,7 +165,6 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* 모바일 수정 */
 @media (max-width: 480px) {
   :root {
     --gap-head-body1: 120px;
@@ -176,7 +177,6 @@ body {
   .envelope { width: 240px; height: 160px; }
   .rolling-section img { width: 92%; max-width: 340px; }
 
-  /* head 위치 아래로 50px 이동 */
   .rolling-section img.head { margin-top: -210px; margin-bottom: var(--gap-head-body1); }
 
   .body1-wrapper { margin-bottom: var(--gap-body1-body2); }
@@ -195,55 +195,39 @@ body {
 <body>
 
 <section class="hero">
-  <div class="envelope">
+  <div class="envelope" id="envelope">
     <div class="envelope-body">
-      <img src="envelope-back.png" class="back" alt="봉투 뒷면">
-      <img src="envelope-shadow-flap.png" class="shadow-flap" alt="뚜껑 그림자">
-      <img src="envelope-front.png" class="front" alt="봉투 앞면">
-      <img src="envelope-flap.png" class="flap" alt="봉투 뚜껑">
+      <img src="envelope-back.png" class="back">
+      <img src="envelope-shadow-flap.png" class="shadow-flap">
+      <img src="envelope-front.png" class="front">
+      <img src="envelope-flap.png" class="flap">
     </div>
-    <img src="letter.png" class="letter" alt="편지">
+    <img src="letter.png" class="letter">
   </div>
 </section>
 
 <section class="rolling-section" id="rollingSection">
-  <img src="rolling head.png" class="head" alt="Rolling Head">
+  <img src="rolling head.png" class="head">
 
   <div class="body1-wrapper">
     <div class="body1-bg"></div>
-    <img src="rolling body1.png" class="body1" alt="Rolling Body 1">
+    <img src="rolling body1.png" class="body1">
   </div>
 
-  <img src="rolling body2.png" class="body2" alt="Rolling Body 2">
-  <img src="rolling body3.png" class="body3" alt="Rolling Body 3">
+  <img src="rolling body2.png" class="body2">
+  <img src="rolling body3.png" class="body3">
 
   <div class="body4-wrapper">
-    <a class="body4-link" href="https://naver.me/GALHY9UV" target="_blank" rel="noopener noreferrer">
-      https://naver.me/GALHY9UV
-    </a>
-    <img src="rolling body4.png" class="body4" alt="Rolling Body 4">
+    <a class="body4-link" href="https://naver.me/GALHY9UV" target="_blank">https://naver.me/GALHY9UV</a>
+    <img src="rolling body4.png" class="body4">
   </div>
 
-  <img src="rolling body5.png" class="body5" alt="Rolling Body 5">
+  <img src="rolling body5.png" class="body5">
 </section>
 
-<script>
-const flapRotationDuration = 1000;
-const letterUpDistance = -180;
-const letterUpDuration = 1000;
-const letterStayDuration = 200;
-const bodyRotateDegree = 10;
-const bodyMoveRight = 40;
-const bodyMoveUp = -10;
-const bodyMoveDuration = 700;
-const letterRotateDegree = -10;
-const letterMoveLeft = 40;
-const letterMoveDown = 50;
-const letterRotateDuration = 800;
-const bgTransitionDelay = 1500;
-const textScrollDistance = 100;
-const textScrollDuration = 1000;
+<audio id="bgm" src="beautiful-dream.mp3" preload="auto"></audio>
 
+<script>
 const flap = document.querySelector('.flap');
 const shadowFlap = document.querySelector('.shadow-flap');
 const letter = document.querySelector('.letter');
@@ -254,49 +238,52 @@ const rollingBody1 = document.querySelector('.rolling-section img.body1');
 const rollingBody1Bg = document.querySelector('.body1-bg');
 const body4Link = document.querySelector('.body4-link');
 const rollingHead = document.querySelector('.rolling-section img.head');
+const bgm = document.getElementById('bgm');
+const envelope = document.getElementById('envelope');
 
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    flap.style.transition = `transform ${flapRotationDuration}ms ease-in-out`;
-    flap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+/* ✅ 새로고침 시 항상 맨 위에서 시작 */
+window.history.scrollRestoration = "manual";
+window.scrollTo(0, 0);
 
-    shadowFlap.style.transition = `transform ${flapRotationDuration}ms ease-in-out, opacity ${flapRotationDuration/2}ms ease-in-out`;
-    shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
-    shadowFlap.style.opacity = 1;
-
-    setTimeout(() => {
-      flap.style.zIndex = 2;
-      shadowFlap.style.zIndex = 3;
-      letter.style.zIndex = 4;
-      letter.style.transition = `transform ${letterUpDuration}ms ease-in-out`;
-      letter.style.transform = `translateY(${letterUpDistance}px)`;
-    }, flapRotationDuration + 50);
-
-    setTimeout(() => {
-      letter.style.zIndex = 6;
-      letter.style.transition = `transform ${letterRotateDuration}ms ease-in-out`;
-      letter.style.transform = `translateX(-${letterMoveLeft}px) translateY(${letterMoveDown}px) rotate(${letterRotateDegree}deg)`;
-
-      envelopeBody.style.transition = `transform ${bodyMoveDuration}ms ease-in-out`;
-      envelopeBody.style.transform = `translateX(${bodyMoveRight}px) translateY(${bodyMoveUp}px) rotate(${bodyRotateDegree}deg)`;
-
-      front.style.zIndex = 5;
-
-      setTimeout(() => {
-        document.body.style.backgroundColor = '#ffffff';
-        rollingSection.style.opacity = 1;
-        smoothScrollBy(textScrollDistance, textScrollDuration);
-
-        // ✅ rolling head 페이드인
-        rollingHead.style.opacity = 1;
-        rollingHead.style.transform = 'translateY(0)';
-
-        initObservers();
-        adjustBody1BgHeight();
-      }, bgTransitionDelay);
-    }, flapRotationDuration + 50 + letterUpDuration + letterStayDuration);
-  }, 1500);
+envelope.addEventListener('click', () => {
+  bgm.play().catch(err => console.log('음악 재생 실패:', err));
+  startEnvelopeAnimation();
 });
+
+function startEnvelopeAnimation() {
+  flap.style.transition = `transform 1s ease-in-out`;
+  flap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+  shadowFlap.style.transition = `transform 1s ease-in-out, opacity 0.5s ease-in-out`;
+  shadowFlap.style.transform = 'translateY(0.5px) rotateX(-180deg)';
+  shadowFlap.style.opacity = 1;
+
+  setTimeout(() => {
+    flap.style.zIndex = 2;
+    shadowFlap.style.zIndex = 3;
+    letter.style.zIndex = 4;
+    letter.style.transition = `transform 1s ease-in-out`;
+    letter.style.transform = `translateY(-180px)`;
+  }, 1050);
+
+  setTimeout(() => {
+    letter.style.zIndex = 6;
+    letter.style.transition = `transform 0.8s ease-in-out`;
+    letter.style.transform = `translateX(-40px) translateY(50px) rotate(-10deg)`;
+    envelopeBody.style.transition = `transform 0.7s ease-in-out`;
+    envelopeBody.style.transform = `translateX(40px) translateY(-10px) rotate(10deg)`;
+    front.style.zIndex = 5;
+
+    setTimeout(() => {
+      document.body.style.backgroundColor = '#ffffff';
+      rollingSection.style.opacity = 1;
+      smoothScrollBy(100, 1000);
+      rollingHead.style.opacity = 1;
+      rollingHead.style.transform = 'translateY(0)';
+      initObservers();
+      adjustBody1BgHeight();
+    }, 1500);
+  }, 2300);
+}
 
 function smoothScrollBy(distance, duration) {
   const start = window.scrollY;
@@ -312,13 +299,14 @@ function smoothScrollBy(distance, duration) {
   requestAnimationFrame(step);
 }
 
+/* body1과 배경을 함께 나타나게 */
 function initObservers(){
   if (rollingBody1 && rollingBody1Bg) {
     const observerBody1 = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          rollingBody1.classList.add('visible');
-          rollingBody1Bg.classList.add('visible');
+          const wrapper = entry.target.closest('.body1-wrapper');
+          if (wrapper) wrapper.classList.add('visible');
           observerBody1.unobserve(entry.target);
         }
       });
@@ -338,7 +326,6 @@ function initObservers(){
       }
     });
   }, { threshold: 0.2 });
-
   others.forEach(img => observerOthers.observe(img));
 }
 
@@ -351,6 +338,5 @@ function adjustBody1BgHeight() {
 }
 window.addEventListener('resize', adjustBody1BgHeight);
 </script>
-
 </body>
 </html>
