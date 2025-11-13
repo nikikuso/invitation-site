@@ -13,7 +13,7 @@
 <!-- Open Graph (OG) - SNS 공유용 -->
 <meta property="og:title" content="레드카펫 위에 그린 꿈">
 <meta property="og:description" content="당신을 특별한 자리에 초대합니다">
-<meta property="og:image" content="letter.png"> <!-- letter.png 사용 -->
+<meta property="og:image" content="https://cvcd75th.co.kr/images/letter.png"> <!-- 서버 URL로 수정 -->
 <meta property="og:url" content="https://cvcd75th.co.kr">
 <meta property="og:type" content="website">
 
@@ -21,7 +21,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="레드카펫 위에 그린 꿈">
 <meta name="twitter:description" content="당신을 특별한 자리에 초대합니다">
-<meta name="twitter:image" content="letter.png"> <!-- letter.png 사용 -->
+<meta name="twitter:image" content="https://cvcd75th.co.kr/images/letter.png">
 
 <style>
 :root{
@@ -305,7 +305,7 @@ function startEnvelopeAnimation() {
     setTimeout(() => {
       document.body.style.backgroundColor = '#ffffff';
       rollingSection.style.opacity = 1;
-      smoothScrollBy(100, 1000);
+      smoothScrollBy(100, 1000); // 자동 스크롤
       rollingHead.style.opacity = 1;
       rollingHead.style.transform = 'translateY(0)';
       initObservers();
