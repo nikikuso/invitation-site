@@ -182,8 +182,8 @@ body {
   .body1-wrapper { margin-bottom: var(--gap-body1-body2); }
   .rolling-section img.body2 { 
     margin-bottom: var(--gap-body2-body3); 
-    width: 100%;       /* 모바일에서 조금 확대 */
-    max-width: 380px; /* 필요 시 조정 */
+    width: 100%;       
+    max-width: 380px; 
   }
   .rolling-section img.body3 { margin-bottom: var(--gap-body3-body4); }
   .body4-wrapper { margin-bottom: var(--gap-body4-body5); }
@@ -245,7 +245,7 @@ const rollingHead = document.querySelector('.rolling-section img.head');
 const bgm = document.getElementById('bgm');
 const envelope = document.getElementById('envelope');
 
-/* ✅ 새로고침 시 항상 맨 위에서 시작 */
+/* 새로고침 시 항상 맨 위에서 시작 */
 window.history.scrollRestoration = "manual";
 window.scrollTo(0, 0);
 
@@ -280,9 +280,15 @@ function startEnvelopeAnimation() {
     setTimeout(() => {
       document.body.style.backgroundColor = '#ffffff';
       rollingSection.style.opacity = 1;
-      smoothScrollBy(100, 1000);
+
+      // ✅ 자동 스크롤 후 rolling head만 표시
       rollingHead.style.opacity = 1;
       rollingHead.style.transform = 'translateY(0)';
+
+      // 원래 자동스크롤 유지
+      smoothScrollBy(100, 1000);
+
+      // body1-bg와 body1는 스크롤 시 나타나도록
       initObservers();
       adjustBody1BgHeight();
     }, 1500);
@@ -303,7 +309,7 @@ function smoothScrollBy(distance, duration) {
   requestAnimationFrame(step);
 }
 
-/* body1과 배경을 함께 나타나게 */
+/* body1과 배경을 스크롤 시 나타나게 */
 function initObservers(){
   if (rollingBody1 && rollingBody1Bg) {
     const observerBody1 = new IntersectionObserver(entries => {
