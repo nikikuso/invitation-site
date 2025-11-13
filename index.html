@@ -32,7 +32,7 @@
   --gap-body4-body5: 10vw;
 
   --body4-link-top: 80%;
-  --body4-link-font-size: 3.5vw;
+  --body4-link-font-size: calc(3.5vw - 5pt); /* 텍스트 5pt 줄임 */
   --body4-link-color: #ffffff;
 }
 
@@ -169,7 +169,7 @@ body {
 
 .body4-link {
   position: absolute;
-  top: var(--body4-link-top);
+  top: calc(var(--body4-link-top) + 20px); /* 기존 30px에서 10px 위로 */
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   z-index: 3;
@@ -189,7 +189,7 @@ body {
 @media (max-width:480px) {
   .envelope { width: 90vw; height: 55vw; }
   .rolling-section img.head { margin-top: -30vw; }
-  .body4-link { top: 78%; font-size: 4vw; }
+  .body4-link { top: calc(78% + 20px); font-size: calc(4vw - 5pt); } /* 모바일도 10px 위, 글자 5pt 감소 */
 }
 </style>
 </head>
