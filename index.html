@@ -13,7 +13,7 @@
 <!-- Open Graph (OG) - SNS 공유용 -->
 <meta property="og:title" content="레드카펫 위에 그린 꿈">
 <meta property="og:description" content="당신을 특별한 자리에 초대합니다">
-<meta property="og:image" content="https://cvcd75th.co.kr/images/letter.png"> <!-- 서버 URL로 수정 -->
+<meta property="og:image" content="https://cvcd75th.co.kr/images/letter.png">
 <meta property="og:url" content="https://cvcd75th.co.kr">
 <meta property="og:type" content="website">
 
@@ -25,14 +25,14 @@
 
 <style>
 :root{
-  --gap-head-body1: 300x;
-  --gap-body1-body2: 400px;
-  --gap-body2-body3: 400px;
-  --gap-body3-body4: 400px;
-  --gap-body4-body5: 100px;
+  --gap-head-body1: 25vw;
+  --gap-body1-body2: 20vw;
+  --gap-body2-body3: 20vw;
+  --gap-body3-body4: 20vw;
+  --gap-body4-body5: 10vw;
 
-  --body4-link-top: 445px;
-  --body4-link-font-size: 10px;
+  --body4-link-top: 80%;
+  --body4-link-font-size: 3.5vw;
   --body4-link-color: #ffffff;
 }
 
@@ -55,8 +55,10 @@ body {
 
 .envelope {
   position: relative;
-  width: 300px;
-  height: 200px;
+  width: 70vw;
+  max-width: 300px;
+  height: 46vw;
+  max-height: 200px;
   perspective: 800px;
   cursor: pointer;
 }
@@ -88,7 +90,7 @@ body {
 
 .rolling-section {
   background: #ffffff;
-  padding: 0 0 100px 0;
+  padding: 0 0 10vh 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,19 +100,19 @@ body {
 }
 
 .rolling-section img {
-  width: 80%;
+  width: 90%;
   max-width: 400px;
   opacity: 0;
-  transform: translateY(50px);
+  transform: translateY(5vh);
   transition: opacity 1.2s ease, transform 1.2s ease;
   display: block;
 }
 
 .rolling-section img.head {
-  margin-top: -150px;
+  margin-top: -25vw;
   margin-bottom: var(--gap-head-body1);
   opacity: 0;
-  transform: translateY(100px);
+  transform: translateY(10vh);
   transition: opacity 1s ease, transform 1s ease;
 }
 
@@ -131,11 +133,11 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   background-color: #efefef;
   z-index: 0;
-  transform: translateX(-80px);
+  transform: translateX(-10%);
   opacity: 0;
   transition: transform 3s ease, opacity 3s ease;
 }
@@ -145,7 +147,7 @@ body {
   z-index: 1;
   width: 80%;
   max-width: 400px;
-  transform: translateX(-80px);
+  transform: translateX(-10%);
   opacity: 0;
   transition: transform 3s ease, opacity 3s ease;
 }
@@ -184,40 +186,10 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-@media (max-width: 480px) {
-  :root {
-    --gap-head-body1: 120px;
-    --gap-body1-body2: 160px;
-    --gap-body2-body3: 160px;
-    --gap-body3-body4: 160px;
-    --gap-body4-body5: 80px;
-  }
-
-  .envelope { width: 240px; height: 160px; }
-  .rolling-section img { width: 92%; max-width: 340px; }
-
-  .rolling-section img.head { margin-top: -210px; margin-bottom: var(--gap-head-body1); }
-
-  /* 전체 100px 내려주기 */
-  .body1-wrapper { 
-    margin-bottom: var(--gap-body1-body2);
-    margin-top: 100px; 
-  }
-  .rolling-section img.body2 { 
-    margin-bottom: var(--gap-body2-body3); 
-    width: 100%;       
-    max-width: 380px; 
-  }
-  .rolling-section img.body3 { margin-bottom: var(--gap-body3-body4); }
-  .body4-wrapper { 
-    margin-bottom: var(--gap-body4-body5); 
-  }
-
-  .body4-link { top: 380px; font-size: 9px; }
-  .body1-bg { width: 100%; left: 0; top: 0; }
-
-  .rolling-section img:last-child { margin-bottom: 0; }
-  .rolling-section { padding-bottom: 10px; }
+@media (max-width:480px) {
+  .envelope { width: 90vw; height: 55vw; }
+  .rolling-section img.head { margin-top: -30vw; }
+  .body4-link { top: 78%; font-size: 4vw; }
 }
 </style>
 </head>
@@ -360,7 +332,7 @@ function initObservers(){
 function adjustBody1BgHeight() {
   const body1 = document.querySelector('.rolling-section img.body1');
   const body1Bg = document.querySelector('.body1-bg');
-  if (body1 && body1Bg && window.innerWidth <= 480) {
+  if (body1 && body1Bg) {
     body1Bg.style.height = body1.offsetHeight + 'px';
   }
 }
