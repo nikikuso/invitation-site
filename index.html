@@ -3,7 +3,26 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Envelope + Rolling Sequence (click start + music)</title>
+
+<!-- 페이지 제목 -->
+<title>레드카펫 위에 그린 꿈</title>
+
+<!-- 기본 설명 -->
+<meta name="description" content="당신을 특별한 자리에 초대합니다">
+
+<!-- Open Graph (OG) - SNS 공유용 -->
+<meta property="og:title" content="레드카펫 위에 그린 꿈">
+<meta property="og:description" content="당신을 특별한 자리에 초대합니다">
+<meta property="og:image" content="https://cvcd75th.co.kr/preview-image.png"> <!-- 실제 미리보기 이미지 URL로 교체 -->
+<meta property="og:url" content="https://cvcd75th.co.kr">
+<meta property="og:type" content="website">
+
+<!-- 트위터 카드 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="레드카펫 위에 그린 꿈">
+<meta name="twitter:description" content="당신을 특별한 자리에 초대합니다">
+<meta name="twitter:image" content="https://cvcd75th.co.kr/preview-image.png">
+
 <style>
 :root{
   --gap-head-body1: 300x;
@@ -251,7 +270,7 @@ const rollingHead = document.querySelector('.rolling-section img.head');
 const bgm = document.getElementById('bgm');
 const envelope = document.getElementById('envelope');
 
-/* ✅ 새로고침 시 항상 맨 위에서 시작 */
+/* 새로고침 시 항상 맨 위에서 시작 */
 window.history.scrollRestoration = "manual";
 window.scrollTo(0, 0);
 
@@ -286,7 +305,7 @@ function startEnvelopeAnimation() {
     setTimeout(() => {
       document.body.style.backgroundColor = '#ffffff';
       rollingSection.style.opacity = 1;
-      smoothScrollBy(100, 1000); // ✅ 자동 스크롤 다시 포함
+      smoothScrollBy(100, 1000); // 자동 스크롤
       rollingHead.style.opacity = 1;
       rollingHead.style.transform = 'translateY(0)';
       initObservers();
@@ -309,7 +328,6 @@ function smoothScrollBy(distance, duration) {
   requestAnimationFrame(step);
 }
 
-/* body1과 배경을 함께 나타나게 */
 function initObservers(){
   if (rollingBody1 && rollingBody1Bg) {
     const observerBody1 = new IntersectionObserver(entries => {
