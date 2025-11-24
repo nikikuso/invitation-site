@@ -158,7 +158,10 @@ body {
   opacity: 1;
 }
 
-.rolling-section img.visible:not(.body1) { transform: translateY(0); opacity: 1; }
+.rolling-section img.visible:not(.body1) {
+  transform: translateY(0);
+  opacity: 1;
+}
 
 .body4-wrapper {
   position: relative;
@@ -169,7 +172,7 @@ body {
 
 .body4-link {
   position: absolute;
-  top: calc(var(--body4-link-top) + 20px); /* 기존 30px에서 10px 위로 */
+  top: calc(var(--body4-link-top) + 20px);
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   z-index: 3;
@@ -189,7 +192,16 @@ body {
 @media (max-width:480px) {
   .envelope { width: 90vw; height: 55vw; }
   .rolling-section img.head { margin-top: -30vw; }
-  .body4-link { top: calc(78% + 20px); font-size: calc(4vw - 5pt); } /* 모바일도 10px 위, 글자 5pt 감소 */
+  .body4-link { top: calc(78% + 20px); font-size: calc(4vw - 5pt); }
+}
+
+/* ★ 추가한 부분 — 모바일 좌우 스크롤 완전 차단 */
+@media (max-width: 480px) {
+  html, body {
+    overflow-x: hidden !important;
+    width: 100%;
+    position: relative;
+  }
 }
 </style>
 </head>
